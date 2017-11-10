@@ -6,7 +6,7 @@ class BridgeableTests: XCTestCase {
     func testForwards() {
         var subject = SomeStruct()
         subject.someEnum = .three
-        let casted = subject as MBXObject
+        let casted = subject as OCObject
         XCTAssert(casted.testIdentifier.isEqual(to: "three"), "Expected backing to reflect correct value")
         subject.someEnum = .five
         XCTAssert(casted.testIdentifier.isEqual(to: "three"), "casted is acting like an object")
@@ -14,7 +14,7 @@ class BridgeableTests: XCTestCase {
     }
     
     func testBackwards() {
-        let objCSubject = MBXObject()
+        let objCSubject = OCObject()
         objCSubject.testIdentifier = "four"
         let subject = objCSubject as SomeStruct
         XCTAssert(subject.someEnum == .four, "expected casted swift object to reflect correct value")
@@ -22,7 +22,7 @@ class BridgeableTests: XCTestCase {
     }
     
     func testOBJCObjectBehavesNormally() {
-        let objCSubject = MBXObject()
+        let objCSubject = OCObject()
         XCTAssert(objCSubject.testIdentifier == "none", "Bridged subject didn't take on struct's initial test value")
         objCSubject.testIdentifier = "three"
         XCTAssert(objCSubject.testIdentifier == "three", "Basic get/set behavior not working")
@@ -40,7 +40,7 @@ struct SomeStruct: Bridgeable {
 
     static var isBridged: Bool = true
     
-    typealias Bridged = MBXObject
+    typealias Bridged = OCObject
     
     var someEnum: SomeEnumType = .none
     
@@ -51,7 +51,7 @@ struct SomeStruct: Bridgeable {
     }
 }
 
-@objc class MBXdObject: NSObject, Bridged {
+@objc class OCObject: NSObject, Bridged {
     typealias Bridging = SomeStruct
     var backing: Bridging
     
