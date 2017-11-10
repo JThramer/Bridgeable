@@ -21,8 +21,17 @@ class BridgeableTests: XCTestCase {
         
     }
     
+    func testOBJCObjectBehavesNormally() {
+        let objCSubject = MBXObject()
+        XCTAssert(objCSubject.testIdentifier == "none", "Bridged subject didn't take on struct's initial test value")
+        objCSubject.testIdentifier = "three"
+        XCTAssert(objCSubject.testIdentifier == "three", "Basic get/set behavior not working")
+        objCSubject.testIdentifier = "five"
+        XCTAssert(objCSubject.testIdentifier == "five", "problems changing values")
+    }
+    
 }
-
+//MARK: - Mock Data Structures
 enum SomeEnumType: String {
     case none, one, two, three, four, five
 }
@@ -42,7 +51,7 @@ struct SomeStruct: Bridgeable {
     }
 }
 
-@objc class MBXObject: NSObject, Bridged {
+@objc class MBXdObject: NSObject, Bridged {
     typealias Bridging = SomeStruct
     var backing: Bridging
     
@@ -56,8 +65,7 @@ struct SomeStruct: Bridgeable {
 
     var testIdentifier: NSString {
         get {
-            let foo = backing.someEnum.rawValue as NSString
-            return foo
+            return backing.someEnum.rawValue as NSString
         }
         set {
             backing.someEnum = SomeEnumType(rawValue: newValue as String)!
