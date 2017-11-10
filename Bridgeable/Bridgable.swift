@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol Bridged: AnyObject {
+public protocol Bridged: NSObjectProtocol {
     associatedtype Bridging
     var backing: Bridging { get }
     init(_ backing: Bridging)
