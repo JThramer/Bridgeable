@@ -32,7 +32,6 @@ struct SomeStruct: Bridgeable {
     static var isBridged: Bool = true
     
     typealias Bridged = MBXObject
-    typealias _ObjectiveCType = MBXObject
     
     var someEnum: SomeEnumType = .none
     
@@ -42,6 +41,7 @@ struct SomeStruct: Bridgeable {
         self.someEnum = SomeEnumType(rawValue: bridged.testIdentifier as String)!
     }
 }
+
 @objc class MBXObject: NSObject, Bridged {
     typealias Bridging = SomeStruct
     var backing: Bridging

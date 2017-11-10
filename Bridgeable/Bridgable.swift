@@ -15,6 +15,7 @@ public protocol Bridgeable: _ObjectiveCBridgeable {
 }
 
 public extension Bridgeable where BridgedType.Bridging == Self {
+    typealias _ObjectiveCType = BridgedType
     static var isBridged: Bool { return true }
     static func _isBridgedToObjectiveC() -> Bool {
         return true
