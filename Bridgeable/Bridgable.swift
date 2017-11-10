@@ -1,43 +1,39 @@
 import Foundation
 
-public protocol BridgeableType: AnyObject {
+public protocol Bridged: AnyObject {
     associatedtype Bridging
-    
     var backing: Bridging { get }
-    
     init(_ backing: Bridging)
 }
 
 public protocol Bridgeable: _ObjectiveCBridgeable {
-    associatedtype Bridged: BridgeableType
+    associatedtype BridgedType: Bridged
     static var isBridged: Bool { get }
     
-    var bridged: Bridged { get }
-    init(from: Bridged)
+    var bridged: BridgedType { get }
+    init(from: BridgedType)
 }
 
-public extension Bridgeable where Bridged.Bridging == Self {
+public extension Bridgeable where BridgedType.Bridging == Self {
+    static var isBridged: Bool { return true }
     static func _isBridgedToObjectiveC() -> Bool {
         return true
     }
     
-    func _bridgeToObjectiveC() -> Bridged {
-        return Bridged(self)
+    func _bridgeToObjectiveC() -> BridgedType {
+        return BridgedType(self)
     }
     
-    var bridged: Bridged { return _bridgeToObjectiveC() }
+    var bridged: BridgedType { return _bridgeToObjectiveC() }
     
-    func toBridgedObject() -> Bridged {
-        return _bridgeToObjectiveC()
-    }
-    static func _forceBridgeFromObjectiveC<T: BridgeableType>(_ source: T, result: inout Self?) {
+    static func _forceBridgeFromObjectiveC<T: Bridged>(_ source: T, result: inout Self?) {
         result = (source.backing as! Self)
     }
-    static func _conditionallyBridgeFromObjectiveC<T: BridgeableType>(_ source: T, result: inout Self?) -> Bool {
+    static func _conditionallyBridgeFromObjectiveC<T: Bridged>(_ source: T, result: inout Self?) -> Bool {
         result = _unconditionallyBridgeFromObjectiveC(source)
         return true
     }
-    static func _unconditionallyBridgeFromObjectiveC<T: BridgeableType>(_ source: T?) -> Self {
+    static func _unconditionallyBridgeFromObjectiveC<T: Bridged>(_ source: T?) -> Self {
         return source!.backing as! Self
     }
 }

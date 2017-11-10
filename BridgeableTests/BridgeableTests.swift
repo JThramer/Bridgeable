@@ -42,7 +42,7 @@ struct SomeStruct: Bridgeable {
         self.someEnum = SomeEnumType(rawValue: bridged.testIdentifier as String)!
     }
 }
-@objc class MBXObject: NSObject, BridgeableType {
+@objc class MBXObject: NSObject, Bridged {
     typealias Bridging = SomeStruct
     var backing: Bridging
     
