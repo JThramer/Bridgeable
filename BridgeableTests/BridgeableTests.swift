@@ -7,17 +7,17 @@ class BridgeableTests: XCTestCase {
         var subject = SomeStruct()
         subject.someEnum = .three
         let casted = subject as MBXObject
-        XCTAssert(casted.testIdentifier.isEqual(to: "three"), "Expected backing to ")
+        XCTAssert(casted.testIdentifier.isEqual(to: "three"), "Expected backing to reflect correct value")
         subject.someEnum = .five
         XCTAssert(casted.testIdentifier.isEqual(to: "three"), "casted is acting like an object")
-        XCTAssert(subject.bridged.testIdentifier.isEqual(to: "five"), "called bridged again should be ")
+        XCTAssert(subject.bridged.testIdentifier.isEqual(to: "five"), "called bridged again should be correct value")
     }
     
     func testBackwards() {
         let objCSubject = MBXObject()
         objCSubject.testIdentifier = "four"
         let subject = objCSubject as SomeStruct
-        XCTAssert(subject.someEnum == .four, "bloop")
+        XCTAssert(subject.someEnum == .four, "expected casted swift object to reflect correct value")
         
     }
     
